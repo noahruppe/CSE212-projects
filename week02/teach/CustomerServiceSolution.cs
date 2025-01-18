@@ -136,8 +136,8 @@ public class CustomerServiceSolution {
         else {
             // Need to read and save the customer before it is deleted from the queue
             var customer = _queue[0];
-            _queue.RemoveAt(0); // Defect 1 - Delete should be done after
             Console.WriteLine(customer);
+            _queue.RemoveAt(0); // Defect 1 - Delete should be done after
         }
     }
 
