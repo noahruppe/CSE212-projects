@@ -1,4 +1,8 @@
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
+using Microsoft.Win32.SafeHandles;
 
 public static class SetsAndMaps
 {
@@ -22,7 +26,19 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var result = new List<string>();
+        var seen = new HashSet<string>();
+
+        foreach(var word in words){
+            var reverse = new string(word.Reverse().ToArray());
+
+            if(seen.Contains(reverse)){
+                result.Add($"{reverse} & {word}");
+            }else{
+                seen.Add(word);
+            }
+        }
+        return result.ToArray();
     }
 
     /// <summary>
@@ -43,6 +59,14 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3];
+            
+            if(degrees.ContainsKey(degree)){
+                degrees[degree] += 1;
+            }else{
+                degrees[degree] = 1;
+            }
+
         }
 
         return degrees;
@@ -67,6 +91,40 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
+        Dictionary<char, int> letters = new Dictionary<char, int>();
+
+        // make sure that it can handle no spaces and lowercase
+        word1 = word1.Replace(" ", "").ToLower();
+        word2 = word2.Replace(" ", "").ToLower();
+        //make sure that both words lengths are the same
+        if(word1.Length == word2.Length){
+            //for every letter in the word1 variable put it in the dictionary and count that it has happened
+            foreach(var letter in word1){
+                if(letters.ContainsKey(letter)){
+                    letters[letter] += 1;
+                // add the letter to the dictionary with the count of 1 being that it is the first time being seen
+                }else{
+                    letters[letter] = 1;
+                }
+            }
+            // if the letter is not found it is false if it is decrease the count
+            foreach(var letter in word2){
+                if(letters.ContainsKey(letter)){
+                    letters[letter] -= 1;
+                }else{
+                    return false;
+                }
+            }
+            // if there is left over letters that means that it is not a anagram
+            foreach(var count in letters.Values){
+                if(count != 0){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        
         return false;
     }
 
@@ -101,6 +159,9 @@ public static class SetsAndMaps
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
+
+        
+
         return [];
     }
 }
